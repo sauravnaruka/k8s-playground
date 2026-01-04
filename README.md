@@ -92,12 +92,6 @@ kubectl apply -f web-deployment.yaml
 kubectl get replicasets
 ```
 
-#### Get Config map
-
-```bash
-kubectl get configmaps
-```
-
 #### Editing deployment
 
 ```bash
@@ -138,6 +132,22 @@ kubectl port-forward <pod-name> 8080:8080
 
 ```bash
 kubectl logs <pod-name>
+```
+
+### Config map
+
+#### Get Config map
+
+```bash
+kubectl get configmaps
+```
+
+### Service
+
+#### Get Service
+
+```bash
+kubectl get svc web-service -o yaml
 ```
 
 ### Misc
