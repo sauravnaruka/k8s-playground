@@ -92,6 +92,12 @@ kubectl apply -f web-deployment.yaml
 kubectl get replicasets
 ```
 
+#### Get Config map
+
+```bash
+kubectl get configmaps
+```
+
 #### Editing deployment
 
 ```bash
