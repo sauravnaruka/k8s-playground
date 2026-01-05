@@ -54,6 +54,24 @@ Deletes the old minikube clusters.
 minikube delete
 ```
 
+#### Minikube IP
+
+```bash
+minikube ip
+```
+
+#### Minikube Tunnel bind
+
+```bash
+minikube tunnel -c
+```
+
+For Linux
+
+```bash
+minikube tunnel --bind-address="127.0.0.1" -c
+```
+
 ### Deploymnets
 
 #### Viewing Deployments
