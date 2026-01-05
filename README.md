@@ -150,6 +150,16 @@ kubectl get configmaps
 kubectl get svc web-service -o yaml
 ```
 
+## Gateway
+
+#### Installing
+
+Gateway API is just a spec and there are different implementations. The install instruction are for (Envoy Gateway)[https://gateway.envoyproxy.io/docs/concepts/]
+
+```bash
+kubectl apply --server-side -f https://github.com/envoyproxy/gateway/releases/download/v1.5.1/install.yaml
+```
+
 ### Misc
 
 #### Kubernetes Proxy
