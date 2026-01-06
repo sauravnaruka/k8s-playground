@@ -152,6 +152,9 @@ kubectl port-forward <pod-name> 8080:8080
 kubectl logs <pod-name>
 ```
 
+Flags:
+`--all-containers`: logs from all containers
+
 ### Config map
 
 #### Get Config map
