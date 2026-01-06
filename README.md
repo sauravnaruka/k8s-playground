@@ -171,7 +171,7 @@ kubectl get configmaps
 kubectl get svc web-service -o yaml
 ```
 
-## Gateway
+### Gateway
 
 #### Installing
 
@@ -179,6 +179,19 @@ Gateway API is just a spec and there are different implementations. The install 
 
 ```bash
 kubectl apply --server-side -f https://github.com/envoyproxy/gateway/releases/download/v1.5.1/install.yaml
+```
+
+### Persistence Volumes
+
+```bash
+kubectl get pvc
+kubectl get pv
+```
+
+#### Deleting PVC
+
+```bash
+kubectl delete pvc <pvc-name>
 ```
 
 ### Misc
