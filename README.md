@@ -104,6 +104,12 @@ kubectl get deployment synergychat-web -o yaml > web-deployment.yaml
 kubectl apply -f web-deployment.yaml
 ```
 
+#### Deleting Deployment
+
+```bash
+kubectl delete deployment <deployment-name>
+```
+
 #### Get Replica Sets
 
 ```bash
@@ -163,12 +169,26 @@ Flags:
 kubectl get configmaps
 ```
 
+#### Delete Configmap
+
+```bash
+kubectl delete configmap <configmap-name>
+```
+
 ### Service
 
 #### Get Service
 
 ```bash
+kubectl -n crawler get svc
+# Or
 kubectl get svc web-service -o yaml
+```
+
+#### Deleting Service
+
+```bash
+kubectl delete service <service-name>
 ```
 
 ### Gateway
@@ -192,6 +212,27 @@ kubectl get pv
 
 ```bash
 kubectl delete pvc <pvc-name>
+```
+
+### Namespaces
+
+Use the `--namespace` or `-n` flag with the command. If you don't then it will use the `default` namespace
+
+The `kube-system` namespace is where all the core Kubernetes components live, it's created automatically when you install Kubernetes. You don't want to mess with it.
+
+#### Get Namespace
+
+```bash
+kubectl get namespaces
+
+# Shorter Version
+kubectl get ns
+```
+
+#### Create New Namespace
+
+```bash
+kubectl create ns <namespace-name>
 ```
 
 ### Misc
