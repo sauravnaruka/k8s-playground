@@ -235,6 +235,19 @@ kubectl get ns
 kubectl create ns <namespace-name>
 ```
 
+### Metrics
+
+```bash
+# Minikube addons
+minikube addons enable metrics-server
+# This will add a metrics server pod in system pods
+# can be verifyied by
+kubectl -n kube-system get pod
+
+# Get resources that each pod is using
+kubectl top pod
+```
+
 ### Misc
 
 #### Kubernetes Proxy
