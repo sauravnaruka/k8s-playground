@@ -1,259 +1,209 @@
 # Kubernetes Playground
 
-A personal playground to experiment with Kubernetes concepts using Minikube.
-This repository focuses on **hands-on commands** with brief conceptual notes.
+Personal playground for experimenting with Kubernetes using Minikube. This is a collection of my most-used commands with brief notes — not meant to be comprehensive.
+
+---
 
 ## Installation
 
-### Kubectl
+**kubectl** — Command-line tool to interact with Kubernetes clusters
+https://kubernetes.io/docs/tasks/tools/
 
-- **kubectl**  
-  Command-line tool to interact with Kubernetes clusters.  
-  Install: https://kubernetes.io/docs/tasks/tools/
+**Minikube** — Runs a local, single-node Kubernetes cluster
+https://minikube.sigs.k8s.io/docs/start/
 
-- **Minikube**  
-  Runs a local, single-node Kubernetes cluster.  
-  Install: https://minikube.sigs.k8s.io/docs/start/
-
-## Installation Check
-
+**Verify installation:**
 ```bash
 kubectl version
 minikube version
 ```
 
-## Commands
+---
 
-### Minikube
+## Minikube
 
-#### Start Minikube
+### Start and Stop
 
 ```bash
-# Initializes and launches local kubernetes cluster
+# Start the local Kubernetes cluster
 minikube start
 
-# Launch Kubernetes dashboard:
+# Launch the Kubernetes dashboard
 minikube dashboard --port=63840
-```
 
-#### Stop Minikube
-
-Stops the running cluster without deleting it:
-
-```bash
+# Stop the cluster (preserves it)
 minikube stop
 ```
 
-#### Deleting Minikube (⚠️ Destructive)
+### Delete Cluster ⚠️
 
-Deletes the old minikube clusters.
-
-> Note: First stop running instance then execute following command
-
+Stop Minikube first, then delete:
 ```bash
 minikube delete
 ```
 
-#### Minikube IP
+### Networking
 
 ```bash
+# Get Minikube IP
 minikube ip
-```
 
-#### Minikube Tunnel bind
-
-```bash
+# Start tunnel (generic)
 minikube tunnel -c
-```
 
-For Linux
-
-```bash
+# Start tunnel (Linux)
 minikube tunnel --bind-address="127.0.0.1" -c
 ```
 
-### Deploymnets
+---
 
-#### Viewing Deployments
+## Deployments
 
 ```bash
+# View all deployments
 kubectl get deployments
-```
 
-#### Deploying
-
-```bash
+# Create a deployment
 kubectl create deployment <deployment-name> --image=<docker-image[:tag]>
-```
 
-- deployment-name: Any valid name, unique within a namespace
-- docker-image: It would be a URL if we weren't hosting the image on Docker Hub, which is the default
-
-#### Get Deployment
-
-```bash
+# Get deployment details as YAML
 kubectl get deployment <deployment-name> -o yaml
 
-# Get deplyment and write to file locally
-kubectl get deployment synergychat-web -o yaml > web-deployment.yaml
-```
+# Export deployment to file
+kubectl get deployment <deployment-name> -o yaml > deployment.yaml
 
-#### Apply changes
+# Apply changes from file
+kubectl apply -f deployment.yaml
 
-```bash
-kubectl apply -f web-deployment.yaml
-```
+# Edit deployment in editor
+kubectl edit deployment <deployment-name>
 
-#### Deleting Deployment
-
-```bash
+# Delete a deployment
 kubectl delete deployment <deployment-name>
-```
 
-#### Get Replica Sets
-
-```bash
+# View replica sets
 kubectl get replicasets
 ```
 
-#### Editing deployment
+**Note:** `<deployment-name>` must be unique within a namespace. Images default to Docker Hub.
+
+---
+
+## Pods
 
 ```bash
-kubectl edit deployment <deployment-name>
-```
-
-### Pods
-
-#### Viewing Pods
-
-Get a list of your running pods
-
-```bash
+# List pods
 kubectl get pods
-```
+kubectl get pods -o wide  # More details
 
-Parameters
-
-- `-o wide`: Give more columns
-
-#### Deleting Pod manually
-
-```bash
+# Delete a pod
 kubectl delete pod <pod-name>
 ```
 
-- This will delete the pod, but as the configuration says `n` pods and by deleting we made the running instance count to `n-1`, so kubernetes start a new pod from the same template making the running instance again `n`. This feels like a restart.
+**Note:** Deleting a pod triggers Kubernetes to start a replacement (like a restart).
 
-#### Port forwarding
+### Working with Pods
 
 ```bash
+# Forward local port to pod
 kubectl port-forward <pod-name> 8080:8080
-```
 
-- pod-name are your pod's name. Can be retrived uding `get pods` command
-
-#### Print Logs of a pod
-
-```bash
+# View pod logs
 kubectl logs <pod-name>
+kubectl logs <pod-name> --all-containers  # All containers in pod
 ```
 
-Flags:
-`--all-containers`: logs from all containers
+---
 
-### Config map
-
-#### Get Config map
+## ConfigMaps
 
 ```bash
+# List config maps
 kubectl get configmaps
-```
 
-#### Delete Configmap
-
-```bash
+# Delete a config map
 kubectl delete configmap <configmap-name>
 ```
 
-### Service
+---
 
-#### Get Service
-
-```bash
-kubectl -n crawler get svc
-# Or
-kubectl get svc web-service -o yaml
-```
-
-#### Deleting Service
+## Services
 
 ```bash
+# List services
+kubectl get svc
+kubectl get svc -n <namespace>  # In specific namespace
+
+# Get service details
+kubectl get svc <service-name> -o yaml
+
+# Delete a service
 kubectl delete service <service-name>
 ```
 
-### Gateway
+---
 
-#### Installing
-
-Gateway API is just a spec and there are different implementations. The install instruction are for (Envoy Gateway)[https://gateway.envoyproxy.io/docs/concepts/]
+## Persistence
 
 ```bash
-kubectl apply --server-side -f https://github.com/envoyproxy/gateway/releases/download/v1.5.1/install.yaml
-```
-
-### Persistence Volumes
-
-```bash
+# List persistent volume claims
 kubectl get pvc
+
+# List persistent volumes
 kubectl get pv
-```
 
-#### Deleting PVC
-
-```bash
+# Delete a PVC
 kubectl delete pvc <pvc-name>
 ```
 
-### Namespaces
+---
 
-Use the `--namespace` or `-n` flag with the command. If you don't then it will use the `default` namespace
+## Namespaces
 
-The `kube-system` namespace is where all the core Kubernetes components live, it's created automatically when you install Kubernetes. You don't want to mess with it.
+Use `-n <namespace>` or `--namespace <namespace>` with commands. Defaults to `default` namespace if not specified.
 
-#### Get Namespace
+The `kube-system` namespace contains core Kubernetes components — avoid modifying it.
 
 ```bash
+# List namespaces
 kubectl get namespaces
+kubectl get ns  # Shorter
 
-# Shorter Version
-kubectl get ns
-```
-
-#### Create New Namespace
-
-```bash
+# Create namespace
 kubectl create ns <namespace-name>
 ```
 
-### Metrics
+---
+
+## Metrics
 
 ```bash
-# Minikube addons
+# Enable metrics server (Minikube addon)
 minikube addons enable metrics-server
-# This will add a metrics server pod in system pods
-# can be verifyied by
+
+# Verify metrics server is running
 kubectl -n kube-system get pod
 
-# Get resources that each pod is using
+# View resource usage per pod
 kubectl top pod
 ```
 
-### Misc
+---
 
-#### Kubernetes Proxy
+## Gateway API
 
-This will start a proxy server on your local machine
+Gateway API is a spec with multiple implementations. Below uses [Envoy Gateway](https://gateway.envoyproxy.io/docs/concepts/).
 
 ```bash
+# Install Envoy Gateway
+kubectl apply --server-side -f https://github.com/envoyproxy/gateway/releases/download/v1.5.1/install.yaml
+```
+
+---
+
+## Utilities
+
+```bash
+# Start local proxy server
 kubectl proxy
 ```
